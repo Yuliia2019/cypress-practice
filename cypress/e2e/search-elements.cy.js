@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+
 
 describe('Search elements', () => {
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe('Search elements', () => {
   })
 
   context('Multiple elements', () => {
-    it.only('first, last, eq', () => {
+    it('first, last, eq', () => {
         cy.get('.socials_icon').first();
         cy.get('.socials_icon').last();
         cy.get('.socials_icon').eq(2);
