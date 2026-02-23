@@ -168,7 +168,7 @@ describe ('Registration', () => {
         it ('Successful registration', () => {
             cy.get('#signupName').type('Test');
             cy.get('#signupLastName').type('Test');
-            cy.get('#signupEmail').type('test+10@example.com');
+            cy.get('#signupEmail').type(`test+${Date.now()}@example.com`);
             cy.get('#signupPassword').type('Test12345');
             cy.get('#signupRepeatPassword').type('Test12345');
             cy.get('.btn.btn-primary').should('be.enabled');
