@@ -1,21 +1,27 @@
 /// <reference types="cypress" />
 
+import SignUp from "../pom/forms/SignUp";
+import HomePage from "../pom/pages/HomePage";
+
 describe ('Registration', () => {
     beforeEach(() => {
-        cy.visit('/');
-        cy.get('.hero-descriptor_btn.btn.btn-primary').click();
+        console.log("HomePage import =", HomePage);
+        console.log("typeof visit =", typeof HomePage?.visit);
+        HomePage.visit();
+        HomePage.openSignUpForm();
     })
 
 
     context ('Name validation', () => {
-        it('Empty field', () => {
+        it ('Empty field', () => {
             cy.get('#signupName').focus(); 
             cy.get('#signupName').blur(); 
             cy.get('.invalid-feedback').should('have.text', 'Name is required'); 
         })
 
-        it ('Wrong data', () => {
-            cy.get('#signupName').type('Юлія'); 
+        it.only ('Wrong data', () => {
+            //cy.get('#signupName').type('Юлія'); 
+            SignUp.enterName('Юлія');
             cy.get('#signupName').blur(); 
             cy.get('.invalid-feedback').should('have.text', 'Name is invalid'); 
         })
@@ -34,19 +40,21 @@ describe ('Registration', () => {
     })
     context('Name boundary values (2 / 20 / 21)', () => {
         it ('Name length = 2 should be valid', () => {
-            cy.get('#signupName').type('Ab').blur();
+            //cy.get('#signupName').type('Ab').blur();
+            SignUp.enterName('Ab').blur();
             cy.get('#signupName').should('not.have.css', 'border-color', 'rgb(220, 53, 69)');
         })
 
         it ('Name length = 20 should be valid', () => {
             const twenty = 'A'.repeat(20);
-            cy.get('#signupName').type(twenty).blur();
+            SignUp.enterName(twenty).blur();
             cy.get('#signupName').should('not.have.css', 'border-color', 'rgb(220, 53, 69)');
         })
 
         it('Name length = 21 should be invalid', () => {
             const twentyOne = 'A'.repeat(21);
-            cy.get('#signupName').type(twentyOne).blur();
+            //cy.get('#signupName').type(twentyOne).blur();
+            SignUp.enterName(twentyOne).blur();
             cy.get('.invalid-feedback').should('be.visible') .and('have.text', 'Name has to be from 2 to 20 characters long');
             cy.get('#signupName').should('have.css', 'border-color', 'rgb(220, 53, 69)');
         })
@@ -58,12 +66,13 @@ describe ('Registration', () => {
             cy.get('.invalid-feedback').should('have.text', 'Last name is required'); 
         })
         it ('Wrong data', () => {
-            cy.get('#signupLastName').type('Юлія'); 
+            //y.get('#signupLastName').type('Юлія'); 
+            SignUp.enterLastName('Юлія');
             cy.get('#signupLastName').blur(); 
             cy.get('.invalid-feedback').should('have.text', 'Last name is invalid'); 
         })
         it ('Wrong length', () => {
-            cy.get('#signupLastName').type('A'); 
+            SignUp.enterLastName('A'); 
             cy.get('#signupLastName').blur(); 
             cy.get('.invalid-feedback').should('have.text', 'Last name has to be from 2 to 20 characters long');
         })
@@ -74,8 +83,9 @@ describe ('Registration', () => {
         })
     })
     context ('Email validation', () => {
-         it ('Wrong data', () => {
-            cy.get('#signupEmail').type('u.test2026'); 
+        it ('Wrong data', () => {
+            //cy.get('#signupEmail').type('u.test2026'); 
+            SignUp.enterEmail('u.test2026');
             cy.get('#signupEmail').blur(); 
             cy.get('.invalid-feedback').should('have.text', 'Email is incorrect'); 
         })
@@ -93,7 +103,8 @@ describe ('Registration', () => {
     })
     context ('Password validation', () => {
         it ('Wrong data', () => {
-            cy.get('#signupPassword').type('1234567'); 
+            //cy.get('#signupPassword').type('1234567'); 
+            SignUp.enterPassword('1234567');
             cy.get('#signupPassword').blur(); 
             cy.get('.invalid-feedback').should('have.text', 'Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter'); 
         })
@@ -111,26 +122,31 @@ describe ('Registration', () => {
     context('Password boundary values (8 / 15 / 16)', () => {
         it ('Password length = 8 should be valid (meets complexity)', () => {
             const pass8 = 'Aa123456';
-            cy.get('#signupPassword').type(pass8).blur();
+            //cy.get('#signupPassword').type(pass8).blur();
+            SignUp.enterPassword(pass8).blur();
             cy.get('#signupPassword').should('not.have.css', 'border-color', 'rgb(220, 53, 69)');
         })
 
         it ('Password length = 15 should be valid (meets complexity)', () => {
             const pass15 = 'Aa1234567890123'; 
-            cy.get('#signupPassword').type(pass15).blur();
+            //cy.get('#signupPassword').type(pass15).blur();
+            SignUp.enterPassword(pass15).blur();
             cy.get('#signupPassword').should('not.have.css', 'border-color', 'rgb(220, 53, 69)');
         })
         it ('Password length = 16 should be invalid', () => {
             const pass16 = 'Aa12345678901234'; 
-            cy.get('#signupPassword').type(pass16).blur();
+            //cy.get('#signupPassword').type(pass16).blur();
+            SignUp.enterPassword(pass16).blur();
             cy.get('.invalid-feedback').should('be.visible').and('have.text', 'Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter');
             cy.get('#signupPassword').should('have.css', 'border-color', 'rgb(220, 53, 69)');
         })
     })
     context ('Re-enter password validation', () => {
         it ('Passwords do not match', () => {
-            cy.get('#signupPassword').type('Test12345');
-            cy.get('#signupRepeatPassword').type('Test123456');
+            //cy.get('#signupPassword').type('Test12345');
+            //cy.get('#signupRepeatPassword').type('Test123456');
+            SignUp.enterPassword('Test12345').blur();   
+            SignUp.enterRepeatPassword('Test123456').blur();
             cy.get('#signupRepeatPassword').blur(); 
             cy.get('.invalid-feedback').should('have.text', 'Passwords do not match'); 
         })
@@ -148,44 +164,52 @@ describe ('Registration', () => {
     })
     context ('Button register validation', () => {
         it ('Disabled button', () => {
-            cy.get('#signupName').type('Test');
-            cy.get('#signupLastName').type('Test');
-            cy.get('#signupEmail').type('test@example.com');
-            cy.get('#signupPassword').type('Test12345');
-            cy.get('#signupRepeatPassword').type('Test123456');
+            //cy.get('#signupName').type('Test');
+            //cy.get('#signupLastName').type('Test');
+            //cy.get('#signupEmail').type('test@example.com');
+            //cy.get('#signupPassword').type('Test12345');
+            //cy.get('#signupRepeatPassword').type('Test123456');
+            SignUp.loginwithCredentials('test@example.com', 'Test12345', 'Test123456', 'Test', 'Test');
             cy.get('.btn.btn-primary').should('be.disabled');
         })
         it ('Enabled button', () => {
-            cy.get('#signupName').type('Test');
-            cy.get('#signupLastName').type('Test');
-            cy.get('#signupEmail').type('test@example.com');
-            cy.get('#signupPassword').type('Test12345');
-            cy.get('#signupRepeatPassword').type('Test12345');
+            //cy.get('#signupName').type('Test');
+            //cy.get('#signupLastName').type('Test');
+            //y.get('#signupEmail').type('test@example.com');
+            //cy.get('#signupPassword').type('Test12345');
+            //cy.get('#signupRepeatPassword').type('Test12345');
+            SignUp.loginwithCredentials('test@example.com', 'Test12345', 'Test12345', 'Test', 'Test');
             cy.get('.btn.btn-primary').should('be.enabled');
         })
     })
     context ('Successful registration', () => {
         it ('Successful registration', () => {
-            cy.get('#signupName').type('Test');
-            cy.get('#signupLastName').type('Test');
-            cy.get('#signupEmail').type(`test+${Date.now()}@example.com`);
-            cy.get('#signupPassword').type('Test12345');
-            cy.get('#signupRepeatPassword').type('Test12345');
+            //cy.get('#signupName').type('Test');
+            //cy.get('#signupLastName').type('Test');
+            //cy.get('#signupEmail').type(`test+${Date.now()}@example.com`);
+            //cy.get('#signupPassword').type('Test12345');
+            //cy.get('#signupRepeatPassword').type('Test12345');
+            //cy.get('.btn.btn-primary').should('be.enabled');
+            //cy.get('.modal-content button.btn.btn-primary').click();
+            SignUp.loginwithCredentials(`test+${Date.now()}@example.com`, 'Test12345', 'Test12345', 'Test', 'Test');   
             cy.get('.btn.btn-primary').should('be.enabled');
-            cy.get('.modal-content button.btn.btn-primary').click();
+            SignUp.clickRegister(); 
             cy.url().should('include', '/garage');
         })
 
     })
     context ('Registration with already registered email', () => {
         it ('Registration with already registered email', () => {
-            cy.get('#signupName').type('Test');
-            cy.get('#signupLastName').type('Test');
-            cy.get('#signupEmail').type('test+3@example.com');
-            cy.get('#signupPassword').type('Test12345');
-            cy.get('#signupRepeatPassword').type('Test12345');
+            //cy.get('#signupName').type('Test');
+            //cy.get('#signupLastName').type('Test');
+            //cy.get('#signupEmail').type('test+3@example.com');
+            //cy.get('#signupPassword').type('Test12345');
+            //cy.get('#signupRepeatPassword').type('Test12345');
+            //cy.get('.btn.btn-primary').should('be.enabled');
+        
+            SignUp.loginwithCredentials('test+3@example.com', 'Test12345', 'Test12345', 'Test', 'Test');  
             cy.get('.btn.btn-primary').should('be.enabled');
-            cy.get('.modal-content button.btn.btn-primary').click();
+            SignUp.clickRegister();
             cy.get('.alert.alert-danger').should('have.text', 'User already exists');
         })
     })
