@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "cypress": "^15.10.0"
+  },
+  "devDependencies": {
+    "cypress-mochawesome-reporter": "^4.0.2",
+    "cypress-real-events": "^1.15.0"
   }
 }

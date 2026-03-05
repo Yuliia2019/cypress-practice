@@ -23,6 +23,16 @@ class SignUpForm {
         return cy.get('.modal-content button.btn.btn-primary');
     }
 
+    get wrongDataErrorMessage() {
+        return cy.get('.invalid-feedback');
+    }
+
+    get errorWithAlreadyRegisteredEmail() {
+        return cy.get('.alert.alert-danger');
+    }
+    get closeModalButton() {
+        return cy.get('.modal-content button.close');
+    }
     enterEmail(email) {
         this.emailField.type(email);
     }
@@ -52,7 +62,14 @@ class SignUpForm {
         this.enterRepeatPassword(repeatPassword);
         this.enterName(name);
         this.enterLastName(lastName);
-        this.clickRegister();
-    }   
+    }
+    triggerErrorOnField(field) {
+        field.focus();
+        field.blur();
+    }
+    clickCloseModal() {
+        this.closeModalButton.click();
+
+}
 }
 export default new SignUpForm();

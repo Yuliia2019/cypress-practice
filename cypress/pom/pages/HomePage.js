@@ -4,7 +4,15 @@ class HomePage {
     }
     visit() {
         cy.visit('/');
-    }   
+    } 
+    
+    visitGarage() {
+        cy.visit('/panel/garage');
+    }
+
+    visitFuelExpenses() {
+        cy.visit('/panel/expenses');
+    }
 
     openSignUpForm() {
         this.signInButton.click();

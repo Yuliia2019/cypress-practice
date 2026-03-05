@@ -4,3 +4,5 @@ cypress/reports/*
 cypress/screenshots/*
 cypress/videos/*
 .DS_Store
+cypress.env.json
+mochawesome-report/*
