@@ -5,7 +5,8 @@ module.exports = defineConfig({
   allowCypressEnv: false,
 
   e2e: {
-    baseUrl: 'https://guest:welcome2qauto@qauto.forstudy.space'
+    baseUrl: 'https://guest:welcome2qauto@qauto.forstudy.space',
+  //baseUrl2: 'https://qauto.forstudy.space'
     
     },
 });

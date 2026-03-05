@@ -58,3 +58,31 @@ Cypress.Commands.add('deleteAllCarsUI', () => {
   tryDeleteOne()
 
 })
+
+Cypress.Commands.add("deleteAllCarsAPI", () => {
+  cy.getCookie("sid").then((cookie) => {
+    if (!cookie?.value) return;
+
+    const sid = `sid=${cookie.value}`;
+
+    cy.request({
+      method: "GET",
+      url: "/api/cars",
+      headers: { Cookie: sid },
+      failOnStatusCode: false,
+    }).then((res) => {
+      const cars = res.body?.data || [];
+
+      if (!cars.length) return;
+
+      cars.forEach((car) => {
+        cy.request({
+          method: "DELETE",
+          url: `/api/cars/${car.id}`,
+          headers: { Cookie: sid },
+          failOnStatusCode: false,
+        });
+      });
+    });
+  });
+});

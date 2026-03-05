@@ -143,6 +143,10 @@ describe("Garage", () => {
     cy.deleteAllCarsUI();
   });
 
+  afterEach(() => {
+    cy.deleteAllCarsAPI();
+  });
+
   context("Mileage validation", () => {
     beforeEach(() => {
       CrudCar.clickAddCarButton();
@@ -199,6 +203,7 @@ context("Edit a mileage", () => {
         CrudCar.updateMileageForFirstCar("20000");
       });
     });
+
 context("Edit a car", () => {
     it("Edit the first car", () => {
         CrudCar.clickEditFirstCar();
