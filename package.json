@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "cypress": "^15.10.0"
+    "cypress": "^15.10.0",
+    "cypress-plugin-api": "^2.11.2"
+  },
+  "devDependencies": {
+    "cypress-mochawesome-reporter": "^4.0.2",
+    "cypress-real-events": "^1.15.0"
   }
 }
